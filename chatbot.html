@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MOKMEE Code Chatbot</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f2f4f7;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .chat-container {
+      width: 400px;
+      background: #ffffff;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .chat-header {
+      background: #6366f1;
+      color: white;
+      padding: 15px;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .chat-box {
+      flex: 1;
+      padding: 15px;
+      overflow-y: auto;
+      background: #f9fafb;
+    }
+
+    .msg {
+      margin-bottom: 12px;
+      max-width: 80%;
+      padding: 10px 15px;
+      border-radius: 15px;
+      clear: both;
+      display: inline-block;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+
+    .user {
+      background: #e0f2fe;
+      float: right;
+      border-bottom-right-radius: 0;
+    }
+
+    .bot {
+      background: #e0e7ff;
+      float: left;
+      border-bottom-left-radius: 0;
+    }
+
+    .chat-input {
+      display: flex;
+      border-top: 1px solid #ddd;
+    }
+
+    .chat-input input {
+      flex: 1;
+      border: none;
+      padding: 12px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    .chat-input button {
+      background: #6366f1;
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    .chat-input button:hover {
+      background: #4f46e5;
+    }
+  </style>
+</head>
+<body>
+
+<div class="chat-container">
+  <div class="chat-header">🤖 MOKMEE Code Chat</div>
+  <div id="chat-box" class="chat-box"></div>
+  <div class="chat-input">
+    <input id="user-input" type="text" placeholder="Ask me about code..." />
+    <button onclick="sendMessage()">Send</button>
+  </div>
+</div>
+
+<script>
+  const chatBox = document.getElementById('chat-box');
+
+  const responses = [
+    { keywords: ["array", "what", "c"], response: "An array in C is a collection of items stored at contiguous memory locations. Example: int arr[5];" },
+    { keywords: ["declare", "array", "c"], response: "You can declare an array in C like this: int numbers[10];" },
+    { keywords: ["python", "list"], response: "A Python list is a dynamic array. You can declare it as: my_list = [1, 2, 3]" },
+    { keywords: ["pointer", "c"], response: "A pointer in C stores the address of another variable. Example: int *ptr = &num;" },
+    { keywords: ["loop", "c"], response: "A for loop in C: for(int i = 0; i < 10; i++) { /* code */ }" },
+    { keywords: ["loop", "python"], response: "A for loop in Python: for i in range(10): print(i)" },
+    { keywords: ["hello"], response: "Hi there! how can i hekp you?" },
+    { keywords: ["what","networking","computer"],response: "In simple terms, computer networking is about connecting two or more computers or devices to allow them to share information, resources, and communication. It's the infrastructure that enables devices to exchange data, share printers, and interact with each other."}
+  ];
+
+  function getBotResponse(input) {
+    input = input.toLowerCase();
+    for (let item of responses) {
+      if (item.keywords.every(word => input.includes(word))) {
+        return item.response;
+      }
+    }
+    return "I'm still learning! Try asking me about arrays, pointers, loops, or Python lists.";
+  }
+
+  function appendMessage(message, sender) {
+    const msgDiv = document.createElement('div');
+    msgDiv.classList.add('msg', sender);
+    msgDiv.textContent = message;
+    chatBox.appendChild(msgDiv);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function sendMessage() {
+    const inputField = document.getElementById('user-input');
+    const userInput = inputField.value.trim();
+    if (!userInput) return;
+
+    appendMessage(userInput, 'user');
+    const reply = getBotResponse(userInput);
+    setTimeout(() => {
+      appendMessage(reply, 'bot');
+    }, 400);
+
+    inputField.value = '';
+  }
+
+  // Trigger on Enter key
+  document.getElementById("user-input").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") {
+      sendMessage();
+    }
+  });
+</script>
+
+</body>
+</html>
